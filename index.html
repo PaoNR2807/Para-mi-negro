@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>💚 Para Tú 💚</title>
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  background: linear-gradient(135deg, #b7e4c7, #d8f3dc);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI', sans-serif;
+  overflow:hidden;
+}
+
+.card {
+  background:white;
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.2);
+  text-align:center;
+  max-width:420px;
+  z-index:10;
+  animation: aparecer 1.5s ease;
+}
+
+h1 {
+  color:#2d6a4f;
+}
+
+button {
+  background: linear-gradient(to right, #52b788, #74c69d);
+  border:none;
+  color:white;
+  padding:15px 30px;
+  border-radius:30px;
+  font-size:1.1em;
+  cursor:pointer;
+  margin-top:15px;
+}
+
+button:hover {
+  transform:scale(1.05);
+}
+
+#mensaje {
+  margin-top:20px;
+  font-size:1.2em;
+  color:#333;
+  min-height:100px;
+}
+
+.corazon, .estrella, .confeti {
+  position:fixed;
+  animation: flotar 6s linear forwards;
+}
+
+.corazon { font-size:45px; }
+.estrella { font-size:25px; }
+.confeti { font-size:20px; }
+
+#final {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: linear-gradient(135deg, #b7e4c7, #d8f3dc);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:3em;
+  color:#1b4332;
+  text-align:center;
+  z-index:100;
+  animation: zoomFinal 2s ease forwards;
+}
+
+@keyframes flotar {
+  0% { bottom:-50px; opacity:1; }
+  100% { bottom:110%; opacity:0; }
+}
+
+@keyframes aparecer {
+  from { opacity:0; transform:scale(0.8); }
+  to { transform:scale(1); opacity:1; }
+}
+
+@keyframes zoomFinal {
+  from { transform: scale(0.2); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="musica" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1>💚 Para tú 💚</h1>
+  <button id="botonMensaje" onclick="iniciar()">Descubre mi mensaje</button>
+  <button onclick="sorpresa()">Sorpresa ✨</button>
+  <div id="mensaje"></div>
+</div>
+
+<script>
+const mensajes = [
+  "Mi negro 💚 quería decirte algo importante...",
+  "Gracias por llegar a mi vida ✨",
+  "Por reparar lo que no dañaste 💚",
+  "Por cuidarme y amarme 🌟"
+];
+
+let indice = 0;
+let i = 0;
+let musicaIniciada = false;
+let animacionesIniciadas = false;
+
+function iniciar() {
+  const boton = document.getElementById("botonMensaje");
+
+  if(!musicaIniciada){
+    document.getElementById("musica").play();
+    musicaIniciada = true;
+  }
+
+  if(!animacionesIniciadas){
+    lanzarCorazones();
+    lanzarEstrellas();
+    lanzarConfeti();
+    animacionesIniciadas = true;
+  }
+
+  if(indice < mensajes.length){
+    mostrarMensaje();
+
+    if(indice === 1){
+      boton.innerText = "Continúa 💚";
+    } else if(indice === 2){
+      boton.innerText = "Aún falta un poquito ✨";
+    } else if(indice === 3){
+      boton.innerText = "Ya casi terminas 🌟";
+    } else if(indice === 4){
+      boton.innerText = "Último mensaje 💖";
+    }
+
+  } else {
+    document.getElementById("mensaje").innerHTML = "💚 Fin del mensaje 💚";
+    boton.innerText = "Mensaje terminado";
+    boton.disabled = true;
+    boton.style.opacity = "0.6";
+    boton.style.cursor = "not-allowed";
+  }
+}
+
+function mostrarMensaje() {
+  const texto = mensajes[indice];
+  const mensajeDiv = document.getElementById("mensaje");
+  mensajeDiv.innerHTML = "";
+  i = 0;
+
+  function escribir(){
+    if(i < texto.length){
+      mensajeDiv.innerHTML += texto.charAt(i);
+      i++;
+      setTimeout(escribir,70);
+    }
+  }
+  escribir();
+
+  indice++;
+}
+
+function sorpresa(){
+  document.body.innerHTML = `
+    <div id="final">
+      💚Nunca olvides cuánto te amo💚
+    </div>
+  `;
+
+  lanzarCorazones();
+  lanzarEstrellas();
+  lanzarConfeti();
+
+  setTimeout(() => {
+    window.close();
+  }, 5000);
+}
+
+function lanzarCorazones(){
+  setInterval(()=>{
+    const c = document.createElement("div");
+    c.className="corazon";
+    c.innerHTML="💚";
+    c.style.left=Math.random()*100+"vw";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),6000);
+  },500);
+}
+
+function lanzarEstrellas(){
+  setInterval(()=>{
+    const e = document.createElement("div");
+    e.className="estrella";
+    e.innerHTML="✨";
+    e.style.left=Math.random()*100+"vw";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),6000);
+  },800);
+}
+
+function lanzarConfeti(){
+  setInterval(()=>{
+    const f = document.createElement("div");
+    f.className="confeti";
+    f.innerHTML="🎉";
+    f.style.left=Math.random()*100+"vw";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),6000);
+  },700);
+}
+</script>
+
+</body>
+</html>
